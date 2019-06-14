@@ -1,6 +1,6 @@
 //----------------------------------------------------
 // File:		EEPROM_M24.cpp
-// Version:  	v0.1.4
+// Version:  	v0.1.5
 // Change date:	14.06.2019
 // Autor:    	4Source
 // Homepage: 	github.com/4Source
@@ -351,8 +351,66 @@ void EEPROM::page_write(uint16_t memoryaddress, uint8_t data[], uint8_t bytes)
 	
 	delay(5);
 }
+void EEPROM::page_write(uint16_t memoryaddress, uint16_t data)
+{
+	// Serial.println("page_write");  
+	
+	uint8_t addr = creatDeviceaddress(memoryaddress);
+	uint8_t msb = msbMemoryaddress(memoryaddress);
+	uint8_t lsb = lsbMemoryaddress(memoryaddress);
+	
+	uint8_t byte0 = (uint8_t)data;
+	uint8_t byte1 = (uint8_t)(data>>=8);
+     
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("memoryaddress "); Serial.println(memoryaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+	// Serial.print("msb "); Serial.println(msb, HEX);
+	// Serial.print("lsb "); Serial.println(lsb, HEX);
+	
+	Wire.beginTransmission(addr);
+	Wire.write(msb);
+	if(type >= 5) {Wire.write(lsb);}
 
+	Wire.write(byte1);
+	Wire.write(byte0);
+	
+	Wire.endTransmission(true);
+	
+	delay(5);
+}
+void EEPROM::page_write(uint16_t memoryaddress, uint32_t data)
+{
+		// Serial.println("page_write");  
+	
+	uint8_t addr = creatDeviceaddress(memoryaddress);
+	uint8_t msb = msbMemoryaddress(memoryaddress);
+	uint8_t lsb = lsbMemoryaddress(memoryaddress);
+	
+	uint8_t byte0 = (uint8_t)data;
+	uint8_t byte1 = (uint8_t)(data>>=8);
+	uint8_t byte2 = (uint8_t)(data>>=8);
+	uint8_t byte3 = (uint8_t)(data>>=8);
+     
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("memoryaddress "); Serial.println(memoryaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+	// Serial.print("msb "); Serial.println(msb, HEX);
+	// Serial.print("lsb "); Serial.println(lsb, HEX);
+	
+	Wire.beginTransmission(addr);
+	Wire.write(msb);
+	if(type >= 5) {Wire.write(lsb);}
 
+	Wire.write(byte3);
+	Wire.write(byte2);
+	Wire.write(byte1);
+	Wire.write(byte0);
+	
+	Wire.endTransmission(true);
+	
+	delay(5);
+}
 
 void EEPROM::setDevAddr(bool e2, bool e1, bool e0)
 {
