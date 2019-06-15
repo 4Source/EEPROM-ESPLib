@@ -1,7 +1,7 @@
 //----------------------------------------------------
 // File:		EEPROM_M24.cpp
-// Version:  	v0.1.5
-// Change date:	14.06.2019
+// Version:  	v0.1.6
+// Change date:	15.06.2019
 // Autor:    	4Source
 // Homepage: 	github.com/4Source
 //----------------------------------------------------
@@ -322,7 +322,68 @@ void EEPROM::byte_write(uint16_t memoryaddress, uint8_t data)
 	
 	delay(5);
 }
+void EEPROM::byte_write(uint16_t memoryaddress, char data)
+{
+	// Serial.println("byte_write");  
+
+	uint8_t addr = creatDeviceaddress(memoryaddress);
+	uint8_t msb = msbMemoryaddress(memoryaddress);
+	uint8_t lsb = lsbMemoryaddress(memoryaddress);
+
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("memoryaddress "); Serial.println(memoryaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+	// Serial.print("msb "); Serial.println(msb, HEX);
+	// Serial.print("lsb "); Serial.println(lsb, HEX);
+	// Serial.print("data "); Serial.println(data, HEX);
+	if(type >= 5)
+	{
+		Wire.beginTransmission(addr);
+		Wire.write(msb);
+		Wire.write(lsb);
+		Wire.write(data);
+		Wire.endTransmission();
+	}
+	else
+	{
+		Wire.beginTransmission(addr);
+		Wire.write(msb);
+		Wire.write(data);
+		Wire.endTransmission();
+	}
+	
+	delay(5);
+}
 void EEPROM::page_write(uint16_t memoryaddress, uint8_t data[], uint8_t bytes)
+{
+	// Serial.println("page_write");  
+	
+	uint8_t addr = creatDeviceaddress(memoryaddress);
+	uint8_t msb = msbMemoryaddress(memoryaddress);
+	uint8_t lsb = lsbMemoryaddress(memoryaddress);
+	if(bytes > getMaxPageSize()) bytes = getMaxPageSize();
+     
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("memoryaddress "); Serial.println(memoryaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+	// Serial.print("msb "); Serial.println(msb, HEX);
+	// Serial.print("lsb "); Serial.println(lsb, HEX);
+	// Serial.print("bytes "); Serial.println(bytes);
+	// for(int i = 0; i < bytes; i++) { Serial.print("data ["); Serial.print(i); Serial.print("] "); Serial.println(data[i]); }
+	
+	Wire.beginTransmission(addr);
+	Wire.write(msb);
+	if(type >= 5) {Wire.write(lsb);}
+	
+	for(int i = 0; i < bytes; i++)
+	{
+		Wire.write(data[i]);
+	}
+	Wire.endTransmission(true);
+	
+	delay(5);
+}
+void EEPROM::page_write(uint16_t memoryaddress, char data[], uint8_t bytes)
 {
 	// Serial.println("page_write");  
 	

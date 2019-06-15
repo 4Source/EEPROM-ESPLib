@@ -1,7 +1,7 @@
 //----------------------------------------------------
 // File:		EEPROM_M24.h
-// Version:  	v0.1.5
-// Change date:	14.06.2019
+// Version:  	v0.1.6
+// Change date:	15.06.2019
 // Autor:    	4Source
 // Homepage: 	github.com/4Source
 //----------------------------------------------------
@@ -27,9 +27,9 @@ enum _deviceType
 		M24256,		//8
 		M24512		//9
 	};
-
+	
 class EEPROM
-{
+{	
 	private:
 	uint8_t deviceaddress;
 	enum _deviceType type;
@@ -53,13 +53,16 @@ class EEPROM
 	// void sequential_current_read(uint8_t);
 	// void sequential_random_read(uint16_t, uint8_t);
 	void byte_write(uint16_t, uint8_t);
+	void byte_write(uint16_t, char);
 	void page_write(uint16_t, uint8_t[], uint8_t);
+	void page_write(uint16_t, char[], uint8_t);
 	void page_write(uint16_t, uint16_t);
 	void page_write(uint16_t, uint32_t);
 	
 	uint8_t getDevAddr();
 	uint16_t getMaxMemAddr();
 	uint8_t getMaxPageSize();
+
 };
 #endif
 //deviceaddress:
