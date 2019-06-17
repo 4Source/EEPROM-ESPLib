@@ -1,7 +1,7 @@
 //----------------------------------------------------
 // File:		EEPROM_M24.h
-// Version:  	v0.1.6
-// Change date:	15.06.2019
+// Version:  	v0.1.7
+// Change date:	17.06.2019
 // Autor:    	4Source
 // Homepage: 	github.com/4Source
 //----------------------------------------------------
@@ -15,24 +15,25 @@
 #include <Wire.h>
 
 enum _deviceType
-	{
-		M24C01,		//0		//Not Tested
-		M24C02,		//1
-		M24C04,		//2
-		M24C08,		//3
-		M24C16,		//4
-		M24C32,		//5		//Not Tested
-		M24C64,		//6
-		M24128,		//7		//Not Tested
-		M24256,		//8
-		M24512		//9
-	};
-	
+{
+	M24C01,		//0		//Not Tested
+	M24C02,		//1
+	M24C04,		//2
+	M24C08,		//3
+	M24C16,		//4
+	M24C32,		//5		//Not Tested
+	M24C64,		//6
+	M24128,		//7		//Not Tested
+	M24256,		//8
+	M24512		//9
+};
+		
 class EEPROM
 {	
 	private:
 	uint8_t deviceaddress;
 	enum _deviceType type;
+	uint8_t *buffer = NULL;
 	
 	uint8_t creatDeviceaddress(uint16_t);
 	uint8_t msbMemoryaddress(uint16_t);
@@ -50,8 +51,8 @@ class EEPROM
 	
 	uint8_t current_address_read();
 	uint8_t random_address_read(uint16_t);
-	// void sequential_current_read(uint8_t);
-	// void sequential_random_read(uint16_t, uint8_t);
+	uint8_t * sequential_current_read(uint8_t);
+	uint8_t * sequential_random_read(uint16_t, uint8_t);
 	void byte_write(uint16_t, uint8_t);
 	void byte_write(uint16_t, char);
 	void page_write(uint16_t, uint8_t[], uint8_t);
@@ -62,6 +63,7 @@ class EEPROM
 	uint8_t getDevAddr();
 	uint16_t getMaxMemAddr();
 	uint8_t getMaxPageSize();
+	void clearBuffer();
 
 };
 #endif

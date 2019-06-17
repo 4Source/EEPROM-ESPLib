@@ -18,8 +18,14 @@ lsbMemoryaddress	KEYWORD2
 setDevAddr	KEYWORD2
 current_address_read	KEYWORD2
 random_address_read	KEYWORD2
+sequential_current_read	KEYWORD2
+sequential_random_read	KEYWORD2
 byte_write	KEYWORD2
 page_write	KEYWORD2
+getDevAddr	KEYWORD2
+getMaxMemAddr	KEYWORD2
+getMaxPageSize	KEYWORD2
+clearBuffer	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
