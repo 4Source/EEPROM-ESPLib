@@ -19,7 +19,11 @@ setDevAddr	KEYWORD2
 current_address_read	KEYWORD2
 random_address_read	KEYWORD2
 sequential_current_read	KEYWORD2
+sequential_current_read_uint16_t	KEYWORD2
+sequential_current_read_uint32_t	KEYWORD2
 sequential_random_read	KEYWORD2
+sequential_random_read_uint16_t	KEYWORD2
+sequential_random_read_uint32_t	KEYWORD2
 byte_write	KEYWORD2
 page_write	KEYWORD2
 getDevAddr	KEYWORD2

@@ -1,6 +1,6 @@
 //----------------------------------------------------
 // File:		EEPROM_M24.h
-// Version:  	v0.1.7
+// Version:  	v0.1.8
 // Change date:	17.06.2019
 // Autor:    	4Source
 // Homepage: 	github.com/4Source
@@ -52,7 +52,11 @@ class EEPROM
 	uint8_t current_address_read();
 	uint8_t random_address_read(uint16_t);
 	uint8_t * sequential_current_read(uint8_t);
+	uint16_t sequential_current_read_uint16_t();
+	uint32_t sequential_current_read_uint32_t();
 	uint8_t * sequential_random_read(uint16_t, uint8_t);
+	uint16_t sequential_random_read_uint16_t(uint16_t);
+	uint32_t sequential_random_read_uint32_t(uint16_t);
 	void byte_write(uint16_t, uint8_t);
 	void byte_write(uint16_t, char);
 	void page_write(uint16_t, uint8_t[], uint8_t);

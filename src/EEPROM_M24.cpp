@@ -1,6 +1,6 @@
 //----------------------------------------------------
 // File:		EEPROM_M24.cpp
-// Version:  	v0.1.7
+// Version:  	v0.1.8
 // Change date:	17.06.2019
 // Autor:    	4Source
 // Homepage: 	github.com/4Source
@@ -247,7 +247,6 @@ uint8_t * EEPROM::sequential_current_read(uint8_t bytes)
 		{
 			while (!Wire.available());
 			buffer[i] = Wire.read();
-			Serial.println(buffer[i]);
 		}  
 	}
 	else
@@ -255,6 +254,56 @@ uint8_t * EEPROM::sequential_current_read(uint8_t bytes)
 		free(buffer);
 	}
 	return buffer;
+} 
+uint16_t EEPROM::sequential_current_read_uint16_t()
+{
+	// Serial.println("sequential_current_read");
+	
+	uint8_t addr = deviceaddress >> 1;
+	uint8_t bytes = 2;
+	uint16_t ret = 0;
+	
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+		
+	Wire.requestFrom((uint8_t)addr, (size_t)bytes, true);
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+	while (!Wire.available());
+	ret += Wire.read();
+
+	return ret;
+} 
+uint32_t EEPROM::sequential_current_read_uint32_t()
+{
+	// Serial.println("sequential_current_read");
+	
+	uint8_t addr = deviceaddress >> 1;
+	uint8_t bytes = 4;
+	uint32_t ret = 0;
+	
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+		
+	Wire.requestFrom((uint8_t)addr, (size_t)bytes, true);
+	
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+	
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+	
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+	
+	while (!Wire.available());
+	ret += Wire.read();
+
+	return ret;
 } 
 uint8_t * EEPROM::sequential_random_read(uint16_t memoryaddress, uint8_t bytes)
 {
@@ -270,17 +319,6 @@ uint8_t * EEPROM::sequential_random_read(uint16_t memoryaddress, uint8_t bytes)
 	// Serial.print("addr "); Serial.println(addr, HEX);
 	// Serial.print("msb "); Serial.println(msb, HEX);
 	// Serial.print("lsb "); Serial.println(lsb, HEX);
-
-	
-
-	while (Wire.available())
-	{
-		Serial.print("rdata "); Serial.println(Wire.read());
-	}
-	
-	Serial.println();
-	
-	
 	
 	free(buffer);
 		
@@ -298,7 +336,6 @@ uint8_t * EEPROM::sequential_random_read(uint16_t memoryaddress, uint8_t bytes)
 		{
 			while (!Wire.available());
 			buffer[i] = Wire.read();
-			Serial.println(buffer[i]);
 		}  
 	}
 	else
@@ -306,6 +343,78 @@ uint8_t * EEPROM::sequential_random_read(uint16_t memoryaddress, uint8_t bytes)
 		free(buffer);
 	}
 	return buffer;
+}
+uint16_t EEPROM::sequential_random_read_uint16_t(uint16_t memoryaddress)
+{
+	// Serial.println("sequential_random_read");
+	
+	uint8_t addr = creatDeviceaddress(memoryaddress);
+	uint8_t msb = msbMemoryaddress(memoryaddress);
+	uint8_t lsb = lsbMemoryaddress(memoryaddress);
+	uint8_t bytes = 2;
+	uint16_t ret = 0;
+	
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("memoryaddress "); Serial.println(memoryaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+	// Serial.print("msb "); Serial.println(msb, HEX);
+	// Serial.print("lsb "); Serial.println(lsb, HEX);
+	
+	Wire.beginTransmission(addr);
+	Wire.write(msb);
+	if(type >= 2) {Wire.write(lsb);}
+	Wire.endTransmission();
+		
+	Wire.requestFrom((uint8_t)addr, (size_t)bytes, true);
+	
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+		
+	while (!Wire.available());
+	ret += Wire.read();
+
+	return ret;
+}
+uint32_t EEPROM::sequential_random_read_uint32_t(uint16_t memoryaddress)
+{
+	// Serial.println("sequential_random_read");
+	
+	uint8_t addr = creatDeviceaddress(memoryaddress);
+	uint8_t msb = msbMemoryaddress(memoryaddress);
+	uint8_t lsb = lsbMemoryaddress(memoryaddress);
+	uint8_t bytes = 4;
+	uint32_t ret = 0;
+	
+	// Serial.print("deviceaddress "); Serial.println(deviceaddress, HEX);
+	// Serial.print("memoryaddress "); Serial.println(memoryaddress, HEX);
+	// Serial.print("addr "); Serial.println(addr, HEX);
+	// Serial.print("msb "); Serial.println(msb, HEX);
+	// Serial.print("lsb "); Serial.println(lsb, HEX);
+	
+	Wire.beginTransmission(addr);
+	Wire.write(msb);
+	if(type >= 2) {Wire.write(lsb);}
+	Wire.endTransmission();
+		
+	Wire.requestFrom((uint8_t)addr, (size_t)bytes, true);
+	
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+	
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+	
+	while (!Wire.available());
+	ret += Wire.read();
+	ret <<= 8; 
+	
+	while (!Wire.available());
+	ret += Wire.read();
+
+	return ret;
 }
 void EEPROM::byte_write(uint16_t memoryaddress, uint8_t data)
 {
